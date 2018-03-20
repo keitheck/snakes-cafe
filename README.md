@@ -19,3 +19,6 @@ None at this time.
 19.03.18 4:30pm -- Initialized repo, added gitignore
 19.03.18 5:00pm -- Added greeting and menu items, receiving input from user
 19.03.18 5:20pm -- Clean exit, receipt properly displays number of items ordered if user orders multiples
+20.03.18 2:15pm -- Wrote test plan
+20.03.18 2:30pm -- Converted menu lists to dicts, started converting things to functions
+20.03.18 3:00pm -- Changed some logic, handled case insensitivity

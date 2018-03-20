@@ -23,7 +23,7 @@ menu = {
                  'Creme Brulee': 1.59
                  },
     'drinks': {'Coffee': 1.59,
-               'Tea': 1.59,
+               'Tea': 2.59,
                'Blood Of The Innocent': 1.59,
                'Water': 1.59,
                'Beer': 1.59,
@@ -38,12 +38,10 @@ menu = {
               }
 }
 
-receipt = {
+receipt = {'subtotal': 0
 }
 
-def get_subtotal(order):
-    subtotal = 0
-    for key, value in 
+subtotal = 0
 
 
 def print_welcome():
@@ -92,16 +90,25 @@ def print_menu():
     print('***************************************')
 
 
-print_menu()
+def get_subtotal(order):
+    for key, value in menu.items():
+        if order in menu[key]:
+            receipt['subtotal'] += menu[key][order]
+    return receipt['subtotal']
 
 
 def item_added(order):
     if order in receipt:
-        total = get_subtotal(receipt)
+        receipt[order] += 1
+        total = get_subtotal(order)
         print(f'{receipt[order]} orders of {order} have been added to your meal. Your total is ${total}')
     else:
-        print(f'One order of {order} has been added to your meal.')
+        receipt[order] = 1
+        total = get_subtotal(order)
+        print(f'One order of {order} has been added to your meal. Your total is ${total}')
 
+
+print_menu()
 
 while True:
     order = input('> ')

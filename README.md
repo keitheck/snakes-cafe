@@ -22,3 +22,9 @@ None at this time.
 20.03.18 2:15pm -- Wrote test plan
 20.03.18 2:30pm -- Converted menu lists to dicts, started converting things to functions
 20.03.18 3:00pm -- Changed some logic, handled case insensitivity
+
+20.03.18 4:00pm -- Subtotal calculating correctly and printing
+20.03.18 4:50pm -- Individual menu items print when typed
+20.03.18 4:54pm -- UUID added to order
+20.03.18 5:44pm -- delete item working
+

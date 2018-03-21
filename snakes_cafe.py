@@ -1,3 +1,6 @@
+import uuid
+
+
 
 menu = {
     'apps': {'Wings': 1.59,
@@ -38,8 +41,9 @@ menu = {
               }
 }
 
-receipt = {'subtotal': 0
-}
+receipt = {'subtotal': 0,
+           'order_id': uuid.uuid4().hex
+          }
 
 subtotal = 0
 
@@ -53,53 +57,70 @@ def print_welcome():
         print('***************************************')
 
 
-def print_menu():
 
+def print_apps():
     print('Appetizers')
     print('-' * 8)
     for key, value in menu['apps'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
+def print_entrees():
     print('Entrees')
     print('-' * 8)
     for key, value in menu['entrees'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
+def print_sides():
     print('Sides')
     print('-' * 8)
     for key, value in menu['sides'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
+def print_desserts():
     print('Desserts')
     print('-' * 8)
     for key, value in menu['desserts'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
+def print_drinks():
     print('Drinks')
     print('-' * 8)
     for key, value in menu['drinks'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
+def print_what_to_order():
     print('***************************************')
     print('**   What would you like to order?   **')
     print('***************************************')
+
+
+def print_menu():
+    print_apps()
+    print_entrees()
+    print_sides()
+    print_desserts()
+    print_drinks()
+    print_what_to_order()
+
+
 
 
 def get_subtotal(order):
     for key, value in menu.items():
         if order in menu[key]:
             receipt['subtotal'] += menu[key][order]
-    return receipt['subtotal']
+    return round(receipt['subtotal'], 2)
 
 
 def item_added(order):
     if order in receipt:
         receipt[order] += 1
+        print(receipt)
         total = get_subtotal(order)
         print(f'{receipt[order]} orders of {order} have been added to your meal. Your total is ${total}')
     else:
@@ -107,15 +128,62 @@ def item_added(order):
         total = get_subtotal(order)
         print(f'One order of {order} has been added to your meal. Your total is ${total}')
 
+def remove_item(order):
+    delete_item = order.split(' ')
+    delete_item = ' '.join(delete_item[1:])
+    for key, value in menu.items():
+        if delete_item in menu[key]:
+            receipt['subtotal'] -= menu[key][delete_item]
+            if receipt[delete_item] == 1:
+                del receipt[delete_item]
+            else:
+                receipt[delete_item] -= 1   
+            print(receipt)
+            total = receipt['subtotal']
+            print(f'One order of {delete_item} has been removed from your meal. Your total is ${total}')
+
 
 print_menu()
 
 while True:
-    order = input('> ')
+    order = input('> ').lower()
     if order == 'quit':
         exit()
 
-    if order == 'menu':
+    elif order == 'menu':
+        print('\n')
         print_menu()
 
-    item_added(order.title())
+    elif order == 'appetizers':
+        print('\n')
+        print_apps()
+        print_what_to_order()  
+
+    elif order == 'entrees':
+        print('\n')
+        print_entrees()
+        print_what_to_order()
+
+    elif order == 'sides':
+        print('\n')
+        print_sides()
+        print_what_to_order()
+
+    elif order == 'desserts':
+        print('\n')
+        print_desserts()
+        print_what_to_order()
+
+    elif order == 'drinks':
+        print('\n')
+        print_drinks()
+        print_what_to_order()   
+
+    elif order.split(' ').pop(0) == 'remove':
+        remove_item(order.title())
+
+    else:
+        item_added(order.title())
+
+
+# def tax():

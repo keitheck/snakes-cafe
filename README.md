@@ -29,3 +29,4 @@ None at this time.
 20.03.18 5:44pm -- delete item working
 20.03.18 7:10pm -- Line item totals working
 20.03.18 7:31pm -- Order receipt, total, etc working
+20.03.18 9:17pm -- Added some tests

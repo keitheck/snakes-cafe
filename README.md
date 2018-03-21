@@ -27,4 +27,5 @@ None at this time.
 20.03.18 4:50pm -- Individual menu items print when typed
 20.03.18 4:54pm -- UUID added to order
 20.03.18 5:44pm -- delete item working
-
+20.03.18 7:10pm -- Line item totals working
+20.03.18 7:31pm -- Order receipt, total, etc working

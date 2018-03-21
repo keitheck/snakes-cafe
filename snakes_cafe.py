@@ -174,47 +174,51 @@ def calculate_line_item(item):
             return(item_name, unit_cost)
 
 
-print_menu()
-
-while True:
-    order = input('> ').lower()
-    if order == 'quit':
-        exit()
-
-    elif order == 'menu':
-        print('\n')
+def main():
         print_menu()
 
-    elif order == 'appetizers':
-        print('\n')
-        print_apps()
-        print_what_to_order()  
+        while True:
+            order = input('> ').lower()
+            if order == 'quit':
+                exit()
 
-    elif order == 'entrees':
-        print('\n')
-        print_entrees()
-        print_what_to_order()
+            elif order == 'menu':
+                print('\n')
+                print_menu()
 
-    elif order == 'sides':
-        print('\n')
-        print_sides()
-        print_what_to_order()
+            elif order == 'appetizers':
+                print('\n')
+                print_apps()
+                print_what_to_order()  
 
-    elif order == 'desserts':
-        print('\n')
-        print_desserts()
-        print_what_to_order()
+            elif order == 'entrees':
+                print('\n')
+                print_entrees()
+                print_what_to_order()
 
-    elif order == 'drinks':
-        print('\n')
-        print_drinks()
-        print_what_to_order()   
+            elif order == 'sides':
+                print('\n')
+                print_sides()
+                print_what_to_order()
 
-    elif order == 'order':
-        print_receipt(receipt)
+            elif order == 'desserts':
+                print('\n')
+                print_desserts()
+                print_what_to_order()
 
-    elif order.split(' ').pop(0) == 'remove':
-        remove_item(order.title())
+            elif order == 'drinks':
+                print('\n')
+                print_drinks()
+                print_what_to_order()   
 
-    else:
-        item_added(order.title())
+            elif order == 'order':
+                print_receipt(receipt)
+
+            elif order.split(' ').pop(0) == 'remove':
+                remove_item(order.title())
+
+            else:
+                item_added(order.title())
+
+if __name__ == "__main__":
+    main()

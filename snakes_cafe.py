@@ -1,7 +1,5 @@
 import uuid
 
-
-
 menu = {
     'apps': {'Wings': 1.59,
              'Cookies': 1.59,
@@ -57,13 +55,13 @@ def print_welcome():
         print('***************************************')
 
 
-
 def print_apps():
     print('Appetizers')
     print('-' * 8)
     for key, value in menu['apps'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
+
 
 def print_entrees():
     print('Entrees')
@@ -72,6 +70,7 @@ def print_entrees():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
+
 def print_sides():
     print('Sides')
     print('-' * 8)
@@ -79,12 +78,14 @@ def print_sides():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
+
 def print_desserts():
     print('Desserts')
     print('-' * 8)
     for key, value in menu['desserts'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
+
 
 def print_drinks():
     print('Drinks')
@@ -108,8 +109,6 @@ def print_menu():
     print_what_to_order()
 
 
-
-
 def get_subtotal(order):
     for key, value in menu.items():
         if order in menu[key]:
@@ -127,6 +126,7 @@ def item_added(order):
         receipt[order] = 1
         total = get_subtotal(order)
         print(f'One order of {order} has been added to your meal. Your total is ${total}')
+
 
 def remove_item(order):
     delete_item = order.split(' ')

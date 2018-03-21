@@ -7,7 +7,10 @@ menu = {
                    'Spring Rolls': 1.59,
                    'Fries': 1.59,
                    'Pickles': 1.59,
-                   'Onion Rings': 1.59
+                   'Onion Rings': 1.59,
+                   'Quesadilla': 1.59,
+                   'Mini Pizzas': 1.59,
+                   'Artichoke Dip': 1.59
                    },
     'entrees': {'Salmon': 1.59,
                 'Steak': 1.59,
@@ -15,28 +18,40 @@ menu = {
                 'A Literal Garden': 1.59,
                 'Chicken': 1.59,
                 'Sushi': 1.59,
-                'Burger': 1.59
+                'Burger': 1.59,
+                'Turf n Turf': 1.59,
+                'Turducken': 1.59,
+                'Quail': 1.59
                 },
     'desserts': {'Ice Cream': 1.59,
                  'Cake': 1.59,
                  'Pie': 1.59,
                  'Froyo': 1.59,
                  'Flan': 1.59,
-                 'Creme Brulee': 1.59
+                 'Creme Brulee': 1.59,
+                 'Chocolate Mousse': 1.59,
+                 'Chocolate Moose': 1.59,
+                 'Chocolate Mouse': 1.59
                  },
     'drinks': {'Coffee': 1.59,
                'Tea': 2.59,
                'Blood Of The Innocent': 1.59,
                'Water': 1.59,
                'Beer': 1.59,
-               'A Larger Beer': 1.59
+               'A Larger Beer': 1.59,
+               'Bubble Tea': 1.59,
+               'Faygo': 1.59,
+               'Red Bull': 1.59
                },
     'sides': {'Tiny Salad': 1.59,
               'Cup Soap': 1.59,
               'Fruit Bowl': 1.59,
               'Fried Okra': 1.59,
               'Bacon': 1.59,
-              'Giant Beer': 1.59
+              'Giant Beer': 1.59,
+              'Just Carbs': 1.59,
+              'Potato Volcano': 1.59,
+              'Carrots': 1.59
               }
 }
 
@@ -152,14 +167,20 @@ def item_added(order):
     """
     This function handles adding items to the order.
     """
-    if order in receipt:
-        receipt[order] += 1
-        total = get_subtotal(order)
-        print(f'{receipt[order]} orders of {order} have been added to your meal. Your total is ${total}')
-    else:
-        receipt[order] = 1
-        total = get_subtotal(order)
-        print(f'One order of {order} has been added to your meal. Your total is ${total}')
+    flag = False
+    for key, value in menu.items():
+        if order in menu[key]:
+            flag = True
+            if order in receipt:
+                receipt[order] += 1
+                total = get_subtotal(order)
+                print(f'{receipt[order]} orders of {order} have been added to your meal. Your total is ${total}')
+            else:
+                receipt[order] = 1
+                total = get_subtotal(order)
+                print(f'One order of {order} has been added to your meal. Your total is ${total}')
+    if flag is False:
+        print('That\'s not on the menu!')
 
 
 def remove_item(order):
@@ -169,14 +190,17 @@ def remove_item(order):
     delete_item = order.split(' ')
     delete_item = ' '.join(delete_item[1:])
     for key, value in menu.items():
-        if delete_item in menu[key]:
-            receipt['subtotal'] -= menu[key][delete_item]
-            if receipt[delete_item] == 1:
-                del receipt[delete_item]
-            else:
-                receipt[delete_item] -= 1   
-            total = receipt['subtotal']
-            print(f'One order of {delete_item} has been removed from your meal. Your total is ${total}')
+        try:
+            if delete_item in menu[key]:
+                receipt['subtotal'] -= menu[key][delete_item]
+                if receipt[delete_item] == 1:
+                    del receipt[delete_item]
+                else:
+                    receipt[delete_item] -= 1
+                total = receipt['subtotal']
+                print(f'One order of {delete_item} has been removed from your meal. Your total is ${total}')
+        except KeyError:
+            print('Oops! You don\'t have one of those on your receipt.')
 
 
 def calculate_line_item(item):
@@ -200,7 +224,6 @@ def print_receipt(receipt):
     print('"Eatability Counts"')
     print('Order', receipt['order_id'])
     print('=' * 50)
-    print(calculate_line_item('tea'))
     for key, value in receipt.items():
         unit_cost = calculate_line_item(key)
         if unit_cost is not None:
@@ -259,4 +282,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('Thanks for your order!')

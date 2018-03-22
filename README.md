@@ -1,7 +1,7 @@
 # Snake Cafe
 
 **Author**: Keith Eckert and Kat Cosgrove
-**Version**: 1.0.0
+**Version**: 1.3.0
 
 ## Overview
 This app is just a simple order entry program.
@@ -30,3 +30,8 @@ None at this time.
 20.03.18 7:10pm -- Line item totals working
 20.03.18 7:31pm -- Order receipt, total, etc working
 20.03.18 9:17pm -- Added some tests
+
+21.03.18 -- Added some error handling
+21.03.18 -- Added ability to import custom menu from CSV file
+21.03.18 -- Added stock/quantity capabilities -- user can order multiples
+

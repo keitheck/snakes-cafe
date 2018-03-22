@@ -57,6 +57,7 @@ default_menu = {
               'Carrots': [1.59, 5]
               }
 }
+
 # Write menu to csv file
 
 # with open('menu_two.csv', 'w') as csv_file:
@@ -166,10 +167,13 @@ def item_added(order):
     """
     # print('order %s' % order)
     try:
-        if type(order[1]) is not int:
+
+        if len(order) == 0:
             order.append(1)
+        if type(order[-1]) is not int:
+            order.append(1)
+
         item = ' '.join(order[:-1])
-        # item = ' '.join(item)
         print(item)
         quant = order[-1]
         flag = False

@@ -114,33 +114,42 @@ subtotal = 0
 
 
 def print_specific(order):
-    print(order.title())
-    print('-' * 8)
-    for key, value in menu[order].items():
-        print(key.ljust(50), '$' + str(value[0]))
-    print('\n')
+    try:
+        print(order.title())
+        print('-' * 8)
+        for key, value in menu[order].items():
+            print(key.ljust(50), '$' + str(value[0]))
+        print('\n')
+    except (TypeError, KeyError, IndexError):
+        print('Oops! Something was wrong with your menu request.')
 
 
 def print_all(dict):
-    for key, value in dict.items():
-        print(key.title())
-        print('-' * 8)
-        for key, value in dict[key].items():
-            print(key.ljust(50), '$' + str(value[0]))
-        print('\n')
-    print('***************************************')
-    print('**   What would you like to order?   **')
-    print('***************************************')
+    try:
+        for key, value in dict.items():
+            print(key.title())
+            print('-' * 8)
+            for key, value in dict[key].items():
+                print(key.ljust(50), '$' + str(value[0]))
+            print('\n')
+        print('*' * 39)
+        print('**   What would you like to order?   **')
+        print('*' * 39)
+    except KeyError:
+        print('Oops! Something was wrong with your request.')
 
 
 def get_subtotal(item):
     """
     This function gets the subtotal of all purchased items.
     """
-    for key, value in menu.items():
-        if item in menu[key]:
-            receipt['subtotal'] += menu[key][item][0]
-    return round(receipt['subtotal'], 2)
+    try:
+        for key, value in menu.items():
+            if item in menu[key]:
+                receipt['subtotal'] += menu[key][item][0]
+        return round(receipt['subtotal'], 2)
+    except TypeError:
+        print('You managed to get something that isn\'t a number! What happened?')
 
 
 def get_sales_tax(subtotal):
@@ -156,30 +165,35 @@ def item_added(order):
     This function handles adding items to the order.
     """
     # print('order %s' % order)
-    if len(order) == 1:
-        order.append(1)
-    item = str(order[0])
-    quant = int(order[1])
-    flag = False
-    # print(menu)
-    for key, value in menu.items():
-        if item in menu[key]:
-            flag = True
-            stock = menu[key][item][1]
-            if quant < float(stock):
-                menu[key][item][1] -= 1
-                if item in receipt:
-                    receipt[item] += 1
-                    total = get_subtotal(item)
-                    print(f'{receipt[item]} orders of {item} have been added to your meal. Your total is ${total}')
+    try:
+        if type(order[1]) is not int:
+            order.append(1)
+        item = ' '.join(order[:-1])
+        # item = ' '.join(item)
+        print(item)
+        quant = order[-1]
+        flag = False
+        # print(menu)
+        for key, value in menu.items():
+            if item in menu[key]:
+                flag = True
+                stock = menu[key][item][1]
+                if quant < float(stock):
+                    menu[key][item][1] -= 1
+                    if item in receipt:
+                        receipt[item] += 1
+                        total = get_subtotal(item)
+                        print(f'{receipt[item]} orders of {item} have been added to your meal. Your total is ${total}')
+                    else:
+                        receipt[item] = 1
+                        total = get_subtotal(item)
+                        print(f'One order of {item} has been added to your meal. Your total is ${total}')
                 else:
-                    receipt[item] = 1
-                    total = get_subtotal(item)
-                    print(f'One order of {item} has been added to your meal. Your total is ${total}')
-            else:
-                print('We don\'t have that many in stock!')
-    if flag is False:
-        print('That\'s not on the menu!')
+                    print('We don\'t have that many in stock!')
+        if flag is False:
+            print('That\'s not on the menu!')
+    except (TypeError, KeyError):
+        print('Your input was invalid! Please order off the menu.')
 
 
 def remove_item(order):

@@ -1,12 +1,15 @@
 import snakes_cafe as sc
+import pytest as pt
 
 
 def test_item_added():
     assert sc.item_added('tea') == print('1 order of Tea has been added to your meal. Your total is $2.59')
 
 
+
 def test_get_subtotal():
     assert sc.get_subtotal('Tea') == 2.59
+
 
 
 def test_get_sales_tax():

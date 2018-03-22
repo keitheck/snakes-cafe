@@ -34,4 +34,5 @@ None at this time.
 21.03.18 -- Added some error handling
 21.03.18 -- Added ability to import custom menu from CSV file
 21.03.18 -- Added stock/quantity capabilities -- user can order multiples
+21.03.18 -- Refactored to make code more dry with regards to print functions
 

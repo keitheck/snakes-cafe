@@ -85,6 +85,12 @@ def import_menu(file_path):
 
 
 def what_menu():
+    print('***************************************')
+    print('**    Welcome to the Snakes Cafe!    **')
+    print('**    Please see our menu below.     **')
+    print('**                                   **')
+    print('**  To quit at any time, type "quit" **')
+    print('***************************************')
     print('Would you like to import a menu?')
     menu_choice = input('> ')
     try:
@@ -174,12 +180,6 @@ def print_menu(dict):
     """
     This function prints the whole menu.
     """
-    print('***************************************')
-    print('**    Welcome to the Snakes Cafe!    **')
-    print('**    Please see our menu below.     **')
-    print('**                                   **')
-    print('**  To quit at any time, type "quit" **')
-    print('***************************************')
     print_apps(dict)
     print_entrees(dict)
     print_sides(dict)
@@ -222,10 +222,9 @@ def item_added(order):
     for key, value in menu.items():
         if item in menu[key]:
             flag = True
-            print('dict item', menu[key][item][1])
-            print('quantity', quant)
             stock = menu[key][item][1]
             if quant < float(stock):
+                menu[key][item][1] -= 1
                 if item in receipt:
                     receipt[item] += 1
                     total = get_subtotal(item)

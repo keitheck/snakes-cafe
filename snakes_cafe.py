@@ -1,7 +1,10 @@
 import uuid
+import csv
+import sys
 
+menu = {}
 
-menu = {
+default_menu = {
     'appetizers': {'Wings': 1.59,
                    'Cookies': 1.59,
                    'Spring Rolls': 1.59,
@@ -54,6 +57,44 @@ menu = {
               'Carrots': 1.59
               }
 }
+# Write menu to csv file
+
+# with open('menu_two.csv', 'w') as csv_file:
+#     csv_menu = csv.writer(csv_file, delimiter=',')
+#     for category in menu_two:
+#         for item in menu_two[category]:
+#             csv_menu.writerow([category, item, menu_two[category][item]])
+# menu_two = {}
+
+
+def import_menu(file_path):
+    with open(file_path, 'r') as f:
+        menu_import = csv.reader(f)
+        for row in menu_import:
+            item = iter(row[1:])
+            # import pdb; pdb.set_trace()
+            if row[0] in menu.keys():
+                menu[row[0]].update(dict(zip(item, item)))
+            else:       
+                menu[row[0]] = dict(zip(item, item))
+        print_menu(menu)        
+
+
+def what_menu():
+    print('Would you like to import a menu?')
+    menu_choice = input('> ')
+    try:
+        if menu_choice.lower() == 'yes':
+            print('What is the filepath?')
+            filepath = input('> ')
+            import_menu(filepath)
+        else:
+            global menu
+            menu = default_menu
+            print_menu(menu)
+    except TypeError:
+        print('invalid input. Enter yes or no')           
+
 
 receipt = {'subtotal': 0,
            'order_id': uuid.uuid4().hex
@@ -70,62 +111,62 @@ subtotal = 0
 #     print('\n')
 
 
-def print_apps():
+def print_apps(dict):
     """
     This function prints appetizers.
     """
     print('Appetizers')
     print('-' * 8)
-    for key, value in menu['appetizers'].items():
+    for key, value in dict['appetizers'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
 
-def print_entrees():
+def print_entrees(dict):
     """
     This function prints entrees.
     """
     print('Entrees')
     print('-' * 8)
-    for key, value in menu['entrees'].items():
+    for key, value in dict['entrees'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
 
-def print_sides():
+def print_sides(dict):
     """
     This function prints sides.
     """
     print('Sides')
     print('-' * 8)
-    for key, value in menu['sides'].items():
+    for key, value in dict['sides'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
 
-def print_desserts():
+def print_desserts(dict):
     """
     This function prints desserts.
     """
     print('Desserts')
     print('-' * 8)
-    for key, value in menu['desserts'].items():
+    for key, value in dict['desserts'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
 
-def print_drinks():
+def print_drinks(dict):
     """
     This function prints drinks.
     """
     print('Drinks')
     print('-' * 8)
-    for key, value in menu['drinks'].items():
+    for key, value in dict['drinks'].items():
         print(key.ljust(50), '$' + str(value))
     print('\n')
 
 
-def print_menu():
+def print_menu(dict):
     """
     This function prints the whole menu.
     """
@@ -135,11 +176,11 @@ def print_menu():
     print('**                                   **')
     print('**  To quit at any time, type "quit" **')
     print('***************************************')
-    print_apps()
-    print_entrees()
-    print_sides()
-    print_desserts()
-    print_drinks()
+    print_apps(dict)
+    print_entrees(dict)
+    print_sides(dict)
+    print_desserts(dict)
+    print_drinks(dict)
     print('***************************************')
     print('**   What would you like to order?   **')
     print('***************************************')
@@ -167,7 +208,9 @@ def item_added(order):
     """
     This function handles adding items to the order.
     """
+    # print('order %s' % order)
     flag = False
+    # print(menu)
     for key, value in menu.items():
         if order in menu[key]:
             flag = True
@@ -240,7 +283,7 @@ def main():
     """
     This function triggers the app.
     """
-    print_menu()
+    what_menu()
 
     while True:
         order = input('> ').lower()

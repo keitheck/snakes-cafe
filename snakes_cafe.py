@@ -3,7 +3,7 @@ import csv
 import sys
 
 menu = {}
-
+categories = ['appetizers', 'entrees', 'drinks', 'desserts', 'sides']
 default_menu = {
     'appetizers': {'Wings': [1.59, 5],
                    'Cookies': [1.59, 5],
@@ -78,7 +78,7 @@ def import_menu(file_path):
                     menu[row[0]].update(dict(zip(item, item)))
                 else:
                     menu[row[0]] = dict(zip(item, item))
-            print_menu(menu)
+            print_all(menu)
     except (IndexError, FileNotFoundError) as error:
         print('File not found or incorrect filetype; please use a .csv')
         what_menu()
@@ -101,7 +101,7 @@ def what_menu():
         else:
             global menu
             menu = default_menu
-            print_menu(menu)
+            print_all(menu)
     except TypeError:
         print('invalid input. Enter yes or no.')
 
@@ -113,78 +113,21 @@ receipt = {'subtotal': 0,
 subtotal = 0
 
 
-# def print_specific(order):
-#     print(order)
-#     print('-' * 8)
-#     for key, value in menu[order].items():
-#         print(key.ljust(50), '$' + str(value))
-#     print('\n')
-
-
-def print_apps(dict):
-    """
-    This function prints appetizers.
-    """
-    print('Appetizers')
+def print_specific(order):
+    print(order.title())
     print('-' * 8)
-    for key, value in dict['appetizers'].items():
+    for key, value in menu[order].items():
         print(key.ljust(50), '$' + str(value[0]))
     print('\n')
 
 
-def print_entrees(dict):
-    """
-    This function prints entrees.
-    """
-    print('Entrees')
-    print('-' * 8)
-    for key, value in dict['entrees'].items():
-        print(key.ljust(50), '$' + str(value[0]))
-    print('\n')
-
-
-def print_sides(dict):
-    """
-    This function prints sides.
-    """
-    print('Sides')
-    print('-' * 8)
-    for key, value in dict['sides'].items():
-        print(key.ljust(50), '$' + str(value[0]))
-    print('\n')
-
-
-def print_desserts(dict):
-    """
-    This function prints desserts.
-    """
-    print('Desserts')
-    print('-' * 8)
-    for key, value in dict['desserts'].items():
-        print(key.ljust(50), '$' + str(value[0]))
-    print('\n')
-
-
-def print_drinks(dict):
-    """
-    This function prints drinks.
-    """
-    print('Drinks')
-    print('-' * 8)
-    for key, value in dict['drinks'].items():
-        print(key.ljust(50), '$' + str(value[0]))
-    print('\n')
-
-
-def print_menu(dict):
-    """
-    This function prints the whole menu.
-    """
-    print_apps(dict)
-    print_entrees(dict)
-    print_sides(dict)
-    print_desserts(dict)
-    print_drinks(dict)
+def print_all(dict):
+    for key, value in dict.items():
+        print(key.title())
+        print('-' * 8)
+        for key, value in dict[key].items():
+            print(key.ljust(50), '$' + str(value[0]))
+        print('\n')
     print('***************************************')
     print('**   What would you like to order?   **')
     print('***************************************')
@@ -213,11 +156,11 @@ def item_added(order):
     This function handles adding items to the order.
     """
     # print('order %s' % order)
-    flag = False
     if len(order) == 1:
         order.append(1)
     item = str(order[0])
     quant = int(order[1])
+    flag = False
     # print(menu)
     for key, value in menu.items():
         if item in menu[key]:
@@ -305,30 +248,10 @@ def main():
 
         elif order == 'menu':
             print('\n')
-            print_menu()
+            print_all(menu)
 
-        elif order == 'appetizers':
-            print('\n')
-            print_apps()
-
-        elif order == 'entrees':
-            print('\n')
-            print_entrees()
-
-        elif order == 'sides':
-            print('\n')
-            print_sides()
-
-        elif order == 'desserts':
-            print('\n')
-            print_drinks()
-
-        elif order == 'drinks':
-            print('\n')
-            print_drinks()
-
-        elif order == 'order':
-            print_receipt(receipt)
+        elif order in categories:
+            print_specific(order)
 
         elif order.split(' ').pop(0) == 'remove':
             remove_item(order.title())

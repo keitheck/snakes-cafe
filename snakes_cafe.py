@@ -69,12 +69,16 @@ default_menu = {
 
 
 def import_menu(file_path):
+    """
+    Allows a user to import a custom menu
+    Arguments: Filepath to a csv
+    Output: Overwrites the menu dictionary with the values from the csv
+    """
     try:
         with open(file_path, 'r') as f:
             menu_import = csv.reader(f)
             for row in menu_import:
                 item = iter(row[1:])
-                # import pdb; pdb.set_trace()
                 if row[0] in menu.keys():
                     menu[row[0]].update(dict(zip(item, item)))
                 else:
@@ -86,6 +90,11 @@ def import_menu(file_path):
 
 
 def what_menu():
+    """
+    Asks the user whether or not they want to use a custom menu
+    Arguments: A string
+    Output: Asks for a filepath and calls the import_menu function if yes, uses default menu if no.
+    """
     print('***************************************')
     print('**    Welcome to the Snakes Cafe!    **')
     print('**    Please see our menu below.     **')
@@ -115,6 +124,11 @@ subtotal = 0
 
 
 def print_specific(order):
+    """
+    Prints only a specific category menu.
+    Arguments: A string
+    Output: Prints the requested category
+    """
     try:
         print(order.title())
         print('-' * 8)
@@ -126,6 +140,11 @@ def print_specific(order):
 
 
 def print_all(dict):
+    """
+    Prints the entire menu
+    Argument: A dictionary
+    Output: Prints the entire menu
+    """
     try:
         for key, value in dict.items():
             print(key.title())
@@ -143,6 +162,8 @@ def print_all(dict):
 def get_subtotal(item):
     """
     This function gets the subtotal of all purchased items.
+    Argument: An item
+    Output: The subtotal of all items stored in the receipt dictionary
     """
     try:
         for key, value in menu.items():
@@ -156,6 +177,8 @@ def get_subtotal(item):
 def get_sales_tax(subtotal):
     """
     This function calculates sales tax.
+    Argument: The subtotal from the receipt dictionary
+    Output: The sales tax based on the subtotal
     """
     tax = subtotal * 0.101
     return tax
@@ -163,9 +186,10 @@ def get_sales_tax(subtotal):
 
 def item_added(order):
     """
-    This function handles adding items to the order.
+    This function handles adding items to the order and checking quantity.
+    Argument: An item from the menu
+    Output: A formatted string alerting the user of the number of items added and their subtotal.
     """
-    # print('order %s' % order)
     try:
 
         if len(order) == 0:
@@ -177,7 +201,6 @@ def item_added(order):
         print(item)
         quant = order[-1]
         flag = False
-        # print(menu)
         for key, value in menu.items():
             if item in menu[key]:
                 flag = True
@@ -203,6 +226,8 @@ def item_added(order):
 def remove_item(order):
     """
     This function handles removing items from the order.
+    Argument: A string
+    Output: A string alerting the user of the item removed and their new subtotal.
     """
     delete_item = order.split(' ')
     delete_item = ' '.join(delete_item[1:])
@@ -223,6 +248,8 @@ def remove_item(order):
 def calculate_line_item(item):
     """
     This function gets each line item and its cost.
+    Argument: An item
+    Output: The unit cost from the original menu and the item name, as a tuple
     """
     for key, value in menu.items():
         if item in menu[key]:
@@ -234,6 +261,8 @@ def calculate_line_item(item):
 def print_receipt(receipt):
     """
     This function prints the final receipt.
+    Arguments: The receipt dictionary
+    Output: The user's final receipt printed to the console.
     """
     tax = round(get_sales_tax(receipt['subtotal']), 2)
     print('*' * 50)

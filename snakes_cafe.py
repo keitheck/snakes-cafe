@@ -69,6 +69,7 @@ default_menu = {
 
 
 class Order:
+    """Order class for managing orders"""
     def __init__(self):
         self.receipt = {'subtotal': 0}
         self.id = str(uuid.uuid4())
@@ -80,6 +81,11 @@ class Order:
         return len(self.receipt)
 
     def add_item(self, item, quantity):
+        """
+        Adds an item to the user's receipt, updates subtotal, decrements quantity from stock
+        Arguments: an item as a string and a quantity as an integer
+        Output: A string alerting the user of the item added, quantity, and current subtotal
+        """
         try:
             flag = False
             for key, value in menu.items():
@@ -106,6 +112,8 @@ class Order:
     def remove_item(self, item, quantity):
         """
         This function handles removing items from the order.
+        Arguments: An item and a quantity
+        Output: A string alerting the user of the number of items removed and the new subtotal
         """
         for key, value in menu.items():
             if item in menu[key]:
@@ -121,6 +129,8 @@ class Order:
     def display_order(self, receipt):
         """
         This function prints the final receipt.
+        Arguments: A receipt dictionary
+        Output: The current receipt with items, quantity, prices, subtotal, and final total
         """
         tax = round(_get_sales_tax(current.receipt['subtotal']), 2)
         print('*' * 50)
@@ -140,65 +150,39 @@ class Order:
         print('*' * 50)
 
 
-    # def print_receipt(self, receipt):
-    #     """
-    #     This function exports receipt to a txt file
-    #     """
-    #     receipt_file = ''
-    #     receipt_file += ('\n' + '*' * 50 + '\n' + 'The Snakes Cafe' + '\n' + 'Order ' +
-    #           self.id + '\n' + '=' * 50)
-    #     subtotal = current.receipt['subtotal']
-    #     for key, value in current.receipt.items():
-    #         unit_cost = _calculate_line_item(key)
-    #         print('unit cost', unit_cost)
-    #         if unit_cost is not None:
-    #             item = unit_cost[0]
-    #             print('item type', type(item))
-    #             price = unit_cost[1]
-    #             receipt_file += item.ljust(40), '$', price * current.receipt[key]
-    #         # to_output = ('{} x {}'.format(key, val))
-    #         # receipt_file += ('\n{:<30} {:>30.2f}'.format(to_output, price))
-    #     tax = subtotal * 0.096
-    #     receipt_file += ('\n' + '-' * 50 + '\nSubtotal {:>52.2f}'.format(subtotal))
-    #     receipt_file += ('\nSales Tax {:>51.2f}'.format(tax))
-    #     receipt_file += ('\n' + '-' * 10 + '\nTotal Due {:>51.2f}\n'.format(subtotal + tax))
-    #     with open('test_receipt.txt' + self.id + '.txt', 'w') as f:
-    #         f.write(receipt_file)
+    def print_receipt(self, receipt):
+        """
+        This function exports receipt to a txt file
+        Arguments: The receipt dictionary
+        Output: A text file containing the user's receipt
+        """
+        receipt_file = ''
+        receipt_file += ('\n' + '*' * 50 + '\n' + 'The Snakes Cafe' + '\n' + 'Order ' + self.id + '\n' + '=' * 50)
+        subtotal = current.receipt['subtotal']
+        for key, value in current.receipt.items():
+            unit_cost = _calculate_line_item(key)
+            if unit_cost is not None:
+                item = unit_cost[0]
+                price = unit_cost[1]
+                to_output = (f'{key} x {value}')
+                receipt_file += ('\n{:<25} {:>25.2f}'.format(to_output, price))
+        tax = subtotal * 0.096
+        receipt_file += ('\n' + '-' * 50 + '\nSubtotal {:>42.2f}'.format(subtotal))
+        receipt_file += ('\nSales Tax {:>41.2f}'.format(tax))
+        receipt_file += ('\n' + '-' * 10 + '\nTotal Due {:>41.2f}\n'.format(subtotal + tax))
+        with open(f'order-{current.id}.txt' + self.id + '.txt', 'w') as f:
+            f.write(receipt_file)
 
 
 current = Order()
-# receipt_list = []
-
-# def _construct_receipt(receipt, path):
-#     """
-#     Constructs a list of strings to be printed to a file
-#     """
- #    tax = round(_get_sales_tax(current.receipt['subtotal']), 2)
- #    purchases = for key, value in current.receipt.items():
- #        unit_cost = _calculate_line_item(key)
- #        if unit_cost is not None:
- #            print(unit_cost[0].ljust(40), '$', unit_cost[1] * current.receipt[key])
-
- #    receipt_list = ['*' * 50, 'The Snakes Cafe', '"Eatability Counts"', 'Order ' + str(current.id), '=' * 50, purchases, '-' * 50, 'Subtotal'.ljust(40) + '$' + round(current.receipt['subtotal'], 2)]
- #    print('*' * 50)
- #    print('The Snakes Cafe')
- #    print('"Eatability Counts"')
- #    print('Order', current.id)
- #    print('=' * 50)
- #    for key, value in current.receipt.items():
- #        unit_cost = _calculate_line_item(key)
- #        if unit_cost is not None:
- #            print(unit_cost[0].ljust(40), '$', unit_cost[1] * current.receipt[key])
- #    print('-' * 50)
- #    print('Subtotal'.ljust(40), '$', round(current.receipt['subtotal'], 2))
- #    print('Sales Tax'.ljust(40), '$', tax)
- #    print('-' * 10)
- #    print('Total Due'.ljust(40), '$', str(float(round(current.receipt['subtotal'] + tax))), 2)
- #    print('*' * 50)
- # current.print_receipt(receipt_list, path)   
 
 
 def _import_menu(file_path):
+    """
+    Function to take a user-provided csv file and write it as a nested dictionary to the menu
+    Arguments: A filepath for a csv
+    Output: The CSV data as a nested dictionary
+    """
     try:
         with open(file_path, 'r') as f:
             menu_import = csv.reader(f)
@@ -216,6 +200,11 @@ def _import_menu(file_path):
 
 
 def what_menu():
+    """
+    Function to introduce the app and ask the user if they want to use a custom menu.
+    If yes, it asks for the filepath and calls the next function. If no, the value of menu is set to a default menu.
+    If no, it overwrites the menu dictionary with the default menu.
+    """
     print('***************************************')
     print('**    Welcome to the Snakes Cafe!    **')
     print('**    Please see our menu below.     **')
@@ -238,6 +227,10 @@ def what_menu():
 
 
 def print_specific(order):
+    """
+    Prints a specific menu category
+    Arguments: A user commant as a string
+    """
     try:
         print(order.title())
         print('-' * 8)
@@ -249,6 +242,9 @@ def print_specific(order):
 
 
 def print_all(dict):
+    """
+    Prints the entire menu.
+    """
     try:
         for key, value in dict.items():
             print(key.title())
@@ -285,6 +281,11 @@ def _get_sales_tax(subtotal):
 
 
 def _split_order(order, callback):
+    """
+    Helper function to split up strings when removing an item.
+    Argument: A user order as a string and a callback function
+    Output: The item and quantity as arguments to the callback
+    """
     if order[0] == 'Remove':
         order = order[1:]
 
@@ -298,7 +299,9 @@ def _split_order(order, callback):
 
 def _calculate_line_item(item):
     """
-    This function gets each line item and its cost.
+    This function gets each line item and its cost from the main menu.
+    Argument: An item
+    Output: The item and its per-unit price as a tuple
     """
     for key, value in menu.items():
         if item in menu[key]:
@@ -336,9 +339,9 @@ def main():
         elif order == 'order':
             current.display_order(current.receipt)
 
-        # elif order == 'print':
-        #     path = 'test_receipt.txt'
-        #     current.print_receipt(current.receipt)
+        elif order == 'print':
+            path = 'test_receipt.txt'
+            current.print_receipt(current.receipt)
 
         elif order.split(' ').pop(0) == 'remove':
             print(order)

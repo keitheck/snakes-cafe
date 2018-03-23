@@ -76,16 +76,15 @@ default_menu = {
 class Order:
     def __init__(self):
         self.receipt = {'subtotal': 0}
-        self.subtotal = 0
         self.id = uuid.uuid4()
 
     def __repr__(self):
-        return 'Order {} | Items: {} | Total: {}'.format(self.id, self.subtotal, len(self.receipt))
+        return 'Order {} | Items: {} | Total: {}'.format(self.id, self.receipt['subtotal'], len(self.receipt))
 
     def __len__(self):
         return len(self.receipt)
 
-    def add_item(start, item, quantity):
+    def add_item(self, item, quantity):
         try:
             flag = False
             for key, value in menu.items():
@@ -109,30 +108,20 @@ class Order:
         except (TypeError, KeyError):
             print('Your input was invalid! Please order off the menu.')
 
-    def remove_item(start, item, quantity):
+    def remove_item(self, item, quantity):
         """
         This function handles removing items from the order.
         """
-        # delete_item = order.split(' ')
-        # delete_item = ' '.join(delete_item[1:])
-        # try:
-        print('item', item, 'quantity', quantity)
-        item.remove('remove')
-
         for key, value in menu.items():
-                if item in menu[key]:
-                    print('item', item)
-                    current.receipt['subtotal'] -= float(menu[key][item])
-                    if current.receipt[item] == 1:
-                        print('inside delete if')
-                        del current.receipt[item]
-                    else:
-                        print('inside decrement')
-                        current.receipt[item] -= 1
-                    total = current.receipt['subtotal']
-                    print(f'One order of {item} has been removed from your meal. Your total is ${total}')
+            if item in menu[key]:
+                if current.receipt[item] == 1:
+                    current.receipt['subtotal'] -= menu[key][item][0]
+                    del current.receipt[item]
                 else:
-                    print('We do not serve that!')
+                    current.receipt[item] -= quantity
+                    current.receipt['subtotal'] -= menu[key][item][0] * quantity
+                total = round(current.receipt['subtotal'], 2)
+                print(f'{quantity} order(s) of {item} has been removed from your meal. Your total is ${total}')
         # except KeyError:
         #     print('Oops! You don\'t have one of those on your receipt.')
 
@@ -228,7 +217,8 @@ def get_sales_tax(subtotal):
 
 
 def _split_order(order, callback):
-    # print(type(order[1]))
+    if order[0] == 'Remove':
+        order = order[1:]
 
     if not order[-1].isdigit():
         order.append(1)

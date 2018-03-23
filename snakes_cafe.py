@@ -122,8 +122,27 @@ class Order:
                     current.receipt['subtotal'] -= menu[key][item][0] * quantity
                 total = round(current.receipt['subtotal'], 2)
                 print(f'{quantity} order(s) of {item} has been removed from your meal. Your total is ${total}')
-        # except KeyError:
-        #     print('Oops! You don\'t have one of those on your receipt.')
+
+    def display_order(self, receipt):
+        """
+        This function prints the final receipt.
+        """
+        tax = round(get_sales_tax(current.receipt['subtotal']), 2)
+        print('*' * 50)
+        print('The Snakes Cafe')
+        print('"Eatability Counts"')
+        print('Order', current.id)
+        print('=' * 50)
+        for key, value in current.receipt.items():
+            unit_cost = calculate_line_item(key)
+            if unit_cost is not None:
+                print(unit_cost[0].ljust(40), '$', unit_cost[1] * current.receipt[key])
+        print('-' * 50)
+        print('Subtotal'.ljust(40), '$', round(current.receipt['subtotal'], 2))
+        print('Sales Tax'.ljust(40), '$', tax)
+        print('-' * 10)
+        print('Total Due'.ljust(40), '$', str(float(round(current.receipt['subtotal'] + tax))), 2)
+        print('*' * 50)
 
 
 current = Order()
@@ -166,7 +185,6 @@ def what_menu():
             print_all(menu)
     except TypeError:
         print('invalid input. Enter yes or no.')
-
 
 
 def print_specific(order):
@@ -228,26 +246,6 @@ def _split_order(order, callback):
     callback(item, quant)
 
 
-# def remove_item(order):
-#     """
-#     This function handles removing items from the order.
-#     """
-#     delete_item = order.split(' ')
-#     delete_item = ' '.join(delete_item[1:])
-#     for key, value in menu.items():
-#         try:
-#             if delete_item in menu[key]:
-#                 receipt['subtotal'] -= float(menu[key][delete_item][0])
-#                 if receipt[delete_item] == 1:
-#                     del receipt[delete_item]
-#                 else:
-#                     receipt[delete_item] -= 1
-#                 total = receipt['subtotal']
-#                 print(f'One order of {delete_item} has been removed from your meal. Your total is ${total}')
-#         except KeyError:
-#             print('Oops! You don\'t have one of those on your receipt.')
-
-
 def calculate_line_item(item):
     """
     This function gets each line item and its cost.
@@ -259,26 +257,26 @@ def calculate_line_item(item):
             return(item_name, unit_cost)
 
 
-def print_receipt(receipt):
-    """
-    This function prints the final receipt.
-    """
-    tax = round(get_sales_tax(receipt['subtotal']), 2)
-    print('*' * 50)
-    print('The Snakes Cafe')
-    print('"Eatability Counts"')
-    print('Order', receipt['order_id'])
-    print('=' * 50)
-    for key, value in receipt.items():
-        unit_cost = calculate_line_item(key)
-        if unit_cost is not None:
-            print(unit_cost[0].ljust(40), '$', unit_cost[1] * receipt[key])
-    print('-' * 50)
-    print('Subtotal'.ljust(40), '$', receipt['subtotal'])
-    print('Sales Tax'.ljust(40), '$', tax)
-    print('-' * 10)
-    print('Total Due'.ljust(40), '$', str(float(round(receipt['subtotal'] + tax))), 2)
-    print('*' * 50)
+# def print_receipt(receipt):
+#     """
+#     This function prints the final receipt.
+#     """
+#     tax = round(get_sales_tax(receipt['subtotal']), 2)
+#     print('*' * 50)
+#     print('The Snakes Cafe')
+#     print('"Eatability Counts"')
+#     print('Order', receipt['order_id'])
+#     print('=' * 50)
+#     for key, value in receipt.items():
+#         unit_cost = calculate_line_item(key)
+#         if unit_cost is not None:
+#             print(unit_cost[0].ljust(40), '$', unit_cost[1] * receipt[key])
+#     print('-' * 50)
+#     print('Subtotal'.ljust(40), '$', receipt['subtotal'])
+#     print('Sales Tax'.ljust(40), '$', tax)
+#     print('-' * 10)
+#     print('Total Due'.ljust(40), '$', str(float(round(receipt['subtotal'] + tax))), 2)
+#     print('*' * 50)
 
 
 def main():
@@ -286,8 +284,6 @@ def main():
     This function triggers the app.
     """
     what_menu()
-
-    # user = Order(item, quantity)
 
     while True:
         order = input('> ').lower()
@@ -300,6 +296,12 @@ def main():
 
         elif order in categories:
             print_specific(order)
+
+        elif order == 'display_order()':
+            current.display_order(current.receipt)
+
+        elif order == 'print()':
+            current.display_order(current.receipt)
 
         elif order.split(' ').pop(0) == 'remove':
             print(order)

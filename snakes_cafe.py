@@ -57,7 +57,6 @@ default_menu = {
               'Carrots': [1.59, 5]
               }
 }
-current = Order()
 
 # Write menu to csv file
 
@@ -139,6 +138,43 @@ class Order:
         print('-' * 10)
         print('Total Due'.ljust(40), '$', str(float(round(current.receipt['subtotal'] + tax))), 2)
         print('*' * 50)
+
+
+    def print_receipt(self, receipt, path):
+        """
+        This function exports receipt to a txt file
+        """
+        with open(path, 'w') as f:
+            f.writelines(receipt)
+
+
+current = Order()
+receipt_list = []
+
+# def _construct_receipt(receipt, path):
+#     """
+#     Constructs a list of strings to be printed to a file
+#     """
+#     tax = round(_get_sales_tax(current.receipt['subtotal']), 2)
+
+#     receipt_list = ['*' * 50, 'The Snakes Cafe', '"Eatability Counts"', 'Order ' + str(current.id), '=' * 50]
+    
+    # print('*' * 50)
+    # print('The Snakes Cafe')
+    # print('"Eatability Counts"')
+    # print('Order', current.id)
+    # print('=' * 50)
+    # for key, value in current.receipt.items():
+    #     unit_cost = _calculate_line_item(key)
+    #     if unit_cost is not None:
+    #         print(unit_cost[0].ljust(40), '$', unit_cost[1] * current.receipt[key])
+    # print('-' * 50)
+    # print('Subtotal'.ljust(40), '$', round(current.receipt['subtotal'], 2))
+    # print('Sales Tax'.ljust(40), '$', tax)
+    # print('-' * 10)
+    # print('Total Due'.ljust(40), '$', str(float(round(current.receipt['subtotal'] + tax))), 2)
+    # print('*' * 50)
+    # current.print_receipt(receipt_list, path)
 
 
 def _import_menu(file_path):
@@ -275,6 +311,14 @@ def main():
 
         elif order == 'print()':
             current.display_order(current.receipt)
+
+        elif order == 'order':
+            current.display_order(current.receipt)
+
+        elif order == 'print':
+            path = 'test_receipt.txt'
+            print(receipt_list)
+            _construct_receipt(current.receipt, 'test_receipt.txt')
 
         elif order.split(' ').pop(0) == 'remove':
             print(order)

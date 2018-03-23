@@ -3,11 +3,6 @@ import csv
 import sys
 
 menu = {}
-# receipt = {'subtotal': 0,
-#            'order_id': uuid.uuid4().hex
-#            }
-
-# subtotal = 0
 categories = ['appetizers', 'entrees', 'drinks', 'desserts', 'sides']
 default_menu = {
     'appetizers': {'Wings': [1.59, 5],
@@ -62,10 +57,11 @@ default_menu = {
               'Carrots': [1.59, 5]
               }
 }
+current = Order()
 
 # Write menu to csv file
 
-# with open('menu_two.csv', 'w') as csv_file:
+# with open('receipt.txt', 'w') as receipt_file:
 #     csv_menu = csv.writer(csv_file, delimiter=',')
 #     for category in menu_two:
 #         for item in menu_two[category]:
@@ -95,11 +91,11 @@ class Order:
                         menu[key][item][1] -= 1
                         if item in current.receipt:
                             current.receipt[item] += quantity
-                            total = get_subtotal(item)
+                            total = _get_subtotal(item)
                             print(f'{current.receipt[item]} orders of {item} have been added to your meal. Your total is ${total}')
                         else:
                             current.receipt[item] = 1
-                            total = get_subtotal(item)
+                            total = _get_subtotal(item)
                             print(f'{quantity} order of {item} has been added to your meal. Your total is ${total}')
                     else:
                         print('We don\'t have that many in stock!')
@@ -127,14 +123,14 @@ class Order:
         """
         This function prints the final receipt.
         """
-        tax = round(get_sales_tax(current.receipt['subtotal']), 2)
+        tax = round(_get_sales_tax(current.receipt['subtotal']), 2)
         print('*' * 50)
         print('The Snakes Cafe')
         print('"Eatability Counts"')
         print('Order', current.id)
         print('=' * 50)
         for key, value in current.receipt.items():
-            unit_cost = calculate_line_item(key)
+            unit_cost = _calculate_line_item(key)
             if unit_cost is not None:
                 print(unit_cost[0].ljust(40), '$', unit_cost[1] * current.receipt[key])
         print('-' * 50)
@@ -145,10 +141,7 @@ class Order:
         print('*' * 50)
 
 
-current = Order()
-
-
-def import_menu(file_path):
+def _import_menu(file_path):
     try:
         with open(file_path, 'r') as f:
             menu_import = csv.reader(f)
@@ -178,7 +171,7 @@ def what_menu():
         if menu_choice.lower() == 'yes':
             print('What is the filepath?')
             filepath = input('> ')
-            import_menu(filepath)
+            _import_menu(filepath)
         else:
             global menu
             menu = default_menu
@@ -213,7 +206,7 @@ def print_all(dict):
         print('Oops! Something was wrong with your request.')
 
 
-def get_subtotal(item):
+def _get_subtotal(item):
     """
     This function gets the subtotal of all purchased items.
     """
@@ -226,7 +219,7 @@ def get_subtotal(item):
         print('You managed to get something that isn\'t a number! What happened?')
 
 
-def get_sales_tax(subtotal):
+def _get_sales_tax(subtotal):
     """
     This function calculates sales tax.
     """
@@ -246,7 +239,7 @@ def _split_order(order, callback):
     callback(item, quant)
 
 
-def calculate_line_item(item):
+def _calculate_line_item(item):
     """
     This function gets each line item and its cost.
     """
@@ -257,35 +250,15 @@ def calculate_line_item(item):
             return(item_name, unit_cost)
 
 
-# def print_receipt(receipt):
-#     """
-#     This function prints the final receipt.
-#     """
-#     tax = round(get_sales_tax(receipt['subtotal']), 2)
-#     print('*' * 50)
-#     print('The Snakes Cafe')
-#     print('"Eatability Counts"')
-#     print('Order', receipt['order_id'])
-#     print('=' * 50)
-#     for key, value in receipt.items():
-#         unit_cost = calculate_line_item(key)
-#         if unit_cost is not None:
-#             print(unit_cost[0].ljust(40), '$', unit_cost[1] * receipt[key])
-#     print('-' * 50)
-#     print('Subtotal'.ljust(40), '$', receipt['subtotal'])
-#     print('Sales Tax'.ljust(40), '$', tax)
-#     print('-' * 10)
-#     print('Total Due'.ljust(40), '$', str(float(round(receipt['subtotal'] + tax))), 2)
-#     print('*' * 50)
-
-
 def main():
     """
     This function triggers the app.
     """
+
     what_menu()
 
     while True:
+
         order = input('> ').lower()
         if order == 'quit':
             exit()

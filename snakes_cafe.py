@@ -71,7 +71,7 @@ default_menu = {
 class Order:
     def __init__(self):
         self.receipt = {'subtotal': 0}
-        self.id = uuid.uuid4()
+        self.id = str(uuid.uuid4())
 
     def __repr__(self):
         return 'Order {} | Items: {} | Total: {}'.format(self.id, self.receipt['subtotal'], len(self.receipt))
@@ -140,41 +140,62 @@ class Order:
         print('*' * 50)
 
 
-    def print_receipt(self, receipt, path):
-        """
-        This function exports receipt to a txt file
-        """
-        with open(path, 'w') as f:
-            f.writelines(receipt)
+    # def print_receipt(self, receipt):
+    #     """
+    #     This function exports receipt to a txt file
+    #     """
+    #     receipt_file = ''
+    #     receipt_file += ('\n' + '*' * 50 + '\n' + 'The Snakes Cafe' + '\n' + 'Order ' +
+    #           self.id + '\n' + '=' * 50)
+    #     subtotal = current.receipt['subtotal']
+    #     for key, value in current.receipt.items():
+    #         unit_cost = _calculate_line_item(key)
+    #         print('unit cost', unit_cost)
+    #         if unit_cost is not None:
+    #             item = unit_cost[0]
+    #             print('item type', type(item))
+    #             price = unit_cost[1]
+    #             receipt_file += item.ljust(40), '$', price * current.receipt[key]
+    #         # to_output = ('{} x {}'.format(key, val))
+    #         # receipt_file += ('\n{:<30} {:>30.2f}'.format(to_output, price))
+    #     tax = subtotal * 0.096
+    #     receipt_file += ('\n' + '-' * 50 + '\nSubtotal {:>52.2f}'.format(subtotal))
+    #     receipt_file += ('\nSales Tax {:>51.2f}'.format(tax))
+    #     receipt_file += ('\n' + '-' * 10 + '\nTotal Due {:>51.2f}\n'.format(subtotal + tax))
+    #     with open('test_receipt.txt' + self.id + '.txt', 'w') as f:
+    #         f.write(receipt_file)
 
 
 current = Order()
-receipt_list = []
+# receipt_list = []
 
 # def _construct_receipt(receipt, path):
 #     """
 #     Constructs a list of strings to be printed to a file
 #     """
-#     tax = round(_get_sales_tax(current.receipt['subtotal']), 2)
+ #    tax = round(_get_sales_tax(current.receipt['subtotal']), 2)
+ #    purchases = for key, value in current.receipt.items():
+ #        unit_cost = _calculate_line_item(key)
+ #        if unit_cost is not None:
+ #            print(unit_cost[0].ljust(40), '$', unit_cost[1] * current.receipt[key])
 
-#     receipt_list = ['*' * 50, 'The Snakes Cafe', '"Eatability Counts"', 'Order ' + str(current.id), '=' * 50]
-    
-    # print('*' * 50)
-    # print('The Snakes Cafe')
-    # print('"Eatability Counts"')
-    # print('Order', current.id)
-    # print('=' * 50)
-    # for key, value in current.receipt.items():
-    #     unit_cost = _calculate_line_item(key)
-    #     if unit_cost is not None:
-    #         print(unit_cost[0].ljust(40), '$', unit_cost[1] * current.receipt[key])
-    # print('-' * 50)
-    # print('Subtotal'.ljust(40), '$', round(current.receipt['subtotal'], 2))
-    # print('Sales Tax'.ljust(40), '$', tax)
-    # print('-' * 10)
-    # print('Total Due'.ljust(40), '$', str(float(round(current.receipt['subtotal'] + tax))), 2)
-    # print('*' * 50)
-    # current.print_receipt(receipt_list, path)
+ #    receipt_list = ['*' * 50, 'The Snakes Cafe', '"Eatability Counts"', 'Order ' + str(current.id), '=' * 50, purchases, '-' * 50, 'Subtotal'.ljust(40) + '$' + round(current.receipt['subtotal'], 2)]
+ #    print('*' * 50)
+ #    print('The Snakes Cafe')
+ #    print('"Eatability Counts"')
+ #    print('Order', current.id)
+ #    print('=' * 50)
+ #    for key, value in current.receipt.items():
+ #        unit_cost = _calculate_line_item(key)
+ #        if unit_cost is not None:
+ #            print(unit_cost[0].ljust(40), '$', unit_cost[1] * current.receipt[key])
+ #    print('-' * 50)
+ #    print('Subtotal'.ljust(40), '$', round(current.receipt['subtotal'], 2))
+ #    print('Sales Tax'.ljust(40), '$', tax)
+ #    print('-' * 10)
+ #    print('Total Due'.ljust(40), '$', str(float(round(current.receipt['subtotal'] + tax))), 2)
+ #    print('*' * 50)
+ # current.print_receipt(receipt_list, path)   
 
 
 def _import_menu(file_path):
@@ -315,10 +336,9 @@ def main():
         elif order == 'order':
             current.display_order(current.receipt)
 
-        elif order == 'print':
-            path = 'test_receipt.txt'
-            print(receipt_list)
-            _construct_receipt(current.receipt, 'test_receipt.txt')
+        # elif order == 'print':
+        #     path = 'test_receipt.txt'
+        #     current.print_receipt(current.receipt)
 
         elif order.split(' ').pop(0) == 'remove':
             print(order)

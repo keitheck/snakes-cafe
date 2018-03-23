@@ -13,7 +13,10 @@ default_menu = {
                    'Onion Rings': [1.59, 5],
                    'Quesadilla': [1.59, 5],
                    'Mini Pizzas': [1.59, 5],
-                   'Artichoke Dip': [1.59, 5]
+                   'Artichoke Dip': [1.59, 5],
+                   'Spaghetti Basket': [1.59, 5],
+                   'Tamales': [1.59, 5],
+                   'Fried Crabs': [1.59, 5]
                    },
     'entrees': {'Salmon': [1.59, 5],
                 'Steak': [1.59, 5],
@@ -24,7 +27,10 @@ default_menu = {
                 'Burger': [1.59, 5],
                 'Turf n Turf': [1.59, 5],
                 'Turducken': [1.59, 5],
-                'Quail': [1.59, 5]
+                'Quail': [1.59, 5],
+                'Rabbit Stew': [1.59, 5],
+                'Puffin': [1.59, 5],
+                'Turbo Carbonara': [1.59, 5]
                 },
     'desserts': {'Ice Cream': [1.59, 5],
                  'Cake': [1.59, 5],
@@ -35,6 +41,9 @@ default_menu = {
                  'Chocolate Mousse': [1.59, 5],
                  'Chocolate Moose': [1.59, 5],
                  'Chocolate Mouse': [1.59, 5],
+                 'Chocolate Fondue': [1.59, 5],
+                 'Just Chocolate': [1.59, 5],
+                 'Cotton Candy': [1.59, 5]
                  },
     'drinks': {'Coffee': [1.59, 5],
                'Tea': [1.59, 5],
@@ -45,6 +54,9 @@ default_menu = {
                'Bubble Tea': [1.59, 5],
                'Faygo': [1.59, 5],
                'Red Bull': [1.59, 5],
+               'Sweet Tea': [1.59, 5],
+               'Whiskey Sour': [1.59, 5],
+               'Cider': [1.59, 5]
                },
     'sides': {'Tiny Salad': [1.59, 5],
               'Cup Soap': [1.59, 5],
@@ -54,7 +66,10 @@ default_menu = {
               'Giant Beer': [1.59, 5],
               'Just Carbs': [1.59, 5],
               'Potato Volcano': [1.59, 5],
-              'Carrots': [1.59, 5]
+              'Carrots': [1.59, 5],
+              'Mac And Cheese': [1.59, 5],
+              'Chitterlings': [1.59, 5],
+              'Hushpuppies': [1.59, 5]
               }
 }
 

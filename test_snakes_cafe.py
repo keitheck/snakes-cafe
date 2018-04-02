@@ -1,5 +1,5 @@
 import snakes_cafe as sc
-# import pytest
+import pytest as pt
 
 
 def test_add_item_returns_string():

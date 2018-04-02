@@ -7,7 +7,6 @@ def test_add_item_returns_string():
     test add_item function is recieving expected input 
     """
     assert sc.current.receipt == {'subtotal': 0}
-    # import pdb; pdb.set_trace()
 
 
 def test_add_item_adds_single_entry():
@@ -60,20 +59,19 @@ def test_remove_item_test_remove_multiple_item():
     sc.current.receipt == {'subtotal': 3.28, 'Fries': 1, 'Steak': 1}
 
 
+def test_remove_item_failure():
+    """Test removing an item not on the receipt."""
+    sc.menu = sc.default_menu
+    sc.current.add_item('Steak', 1)
+    with pt.raises(Exception):
+        sc.current.remove_item('Faygo', 1)
+
+
 def test_uuid_created():
     """
     Test is output is a string
     """
     assert type(sc.current.id) == str
-
-
-def test__len__():
-    """
-    Returns length of reciept
-    """
-    sc.menu = sc.default_menu
-    sc.current.add_item('Steak', 1)
-    assert sc.current.__len__() == 4
 
 
 def test__repr__():
@@ -83,19 +81,45 @@ def test__repr__():
     assert type(sc.current.__repr__()) == str
 
 
+def test_item_add_failure():
+    """Test adding an item not on the menu."""
+    sc.menu = sc.default_menu
+    with pt.raises(Exception):
+        sc.current.add_item('Spam Musubi', 1)
+
+
+def test_len():
+    """Test __len__ of receipt."""
+    sc.menu = sc.default_menu
+    sc.current.add_item('Fries', 3)
+    sc.current.add_item('Steak', 1)
+    assert sc.current.__len__() == 5
+
+
+def test_bad_menu():
+    """Test exception for giving a bad filetype."""
+    with pt.raises(Exception):
+        sc.import_menu('test.txt')
+
+
+def test_invalid_menu_print():
+    """Test exception for requesting nonexistant menu."""
+    with pt.raises(Exception):
+        sc.print_specific('testing')
+
+
+def test_get_subtotal():
+    """Test subtotal calculation."""
+    sc.menu = sc.default_menu
+    assert sc._get_subtotal('Wings') == 14.31
+
+
 def test_import_menu():
     """
     test that menu is imported
     """
     assert sc.menu != {}
-
-
-def test_get_subtoatal():
-    """
-    tests that reciept show correct subtotal
-    """
-    assert sc.current.receipt['subtotal'] is not None    
-
+    
 
 def test_get_salestax():
     """

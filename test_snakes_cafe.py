@@ -5,7 +5,6 @@ import pytest as pt
 def test_add_item_returns_string():
     # test add_item function is recieving expected input 
     assert sc.current.receipt == {'subtotal': 0}
-    # import pdb; pdb.set_trace()
 
 
 def test_add_item_adds_single_entry():
@@ -48,19 +47,49 @@ def test_remove_item_test_remove_multiple_item():
     sc.current.receipt == {'subtotal': 3.28, 'Fries': 1, 'Steak': 1}
 
 
+def test_remove_item_failure():
+    """Test removing an item not on the receipt."""
+    sc.menu = sc.default_menu
+    sc.current.add_item('Steak', 1)
+    with pt.raises(Exception):
+        sc.current.remove_item('Faygo', 1)
 
 
-# def test_item_added():
-#     assert sc.item_added(['tea']) == print('1 order of Tea has been added to your meal. Your total is $2.59')
+def test_item_add_failure():
+    """Test adding an item not on the menu."""
+    sc.menu = sc.default_menu
+    with pt.raises(Exception):
+        sc.current.add_item('Spam Musubi', 1)
 
 
-# # def test_get_subtotal():
-# #     assert sc.get_subtotal('Tea') == 1.59
+def test_len():
+    """Test __len__ of receipt."""
+    sc.menu = sc.default_menu
+    sc.current.add_item('Fries', 3)
+    sc.current.add_item('Steak', 1)
+    assert sc.current.__len__() == 5
 
 
-# def test_get_sales_tax():
-#     assert sc.get_sales_tax(5.00) == .505
+def test_bad_menu():
+    """Test exception for giving a bad filetype."""
+    with pt.raises(Exception):
+        sc.import_menu('test.txt')
 
 
-# def test_remove_item():
-#     assert sc.remove_item('tea') == print('One order of Tea has been removed from your meal. Your total is $0.00')
+def test_invalid_menu_print():
+    """Test exception for requesting nonexistant menu."""
+    with pt.raises(Exception):
+        sc.print_specific('testing')
+
+
+def test_get_subtotal():
+    """Test subtotal calculation."""
+    sc.menu = sc.default_menu
+    assert sc._get_subtotal('Wings') == 14.31
+
+
+def test_sales_tax():
+    """Test sales tax calculation."""
+    assert sc._get_sales_tax(10.00) == 1.01
+
+

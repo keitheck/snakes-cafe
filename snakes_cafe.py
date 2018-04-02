@@ -120,9 +120,9 @@ class Order:
                     else:
                         print('We don\'t have that many in stock!')
             if flag is False:
-                print('That\'s not on the menu!')
+                raise KeyError('That is not on the menu!')
         except (TypeError, KeyError):
-            print('Your input was invalid! Please order off the menu.')
+            raise KeyError('We don\'t sell that!')
 
     def remove_item(self, item, quantity):
         """
@@ -132,6 +132,8 @@ class Order:
         """
         for key, value in menu.items():
             if item in menu[key]:
+                if item not in current.receipt:
+                    raise ValueError('You don\'t have one of those on your order!')
                 if current.receipt[item] == 1:
                     current.receipt['subtotal'] -= menu[key][item][0]
                     del current.receipt[item]
@@ -210,7 +212,7 @@ def _import_menu(file_path):
                     menu[row[0]] = dict(zip(item, item))
             print_all(menu)
     except (IndexError, FileNotFoundError) as error:
-        print('File not found or incorrect filetype; please use a .csv')
+        raise Exception('File not found or incorrect filetype; please use a CSV.')
         what_menu()
 
 
@@ -253,8 +255,7 @@ def print_specific(order):
             print(key.ljust(50), '$' + str(value[0]))
         print('\n')
     except (TypeError, KeyError, IndexError):
-        print('Oops! Something was wrong with your menu request.')
-
+        raise Exception('Something went wrong! Please request a menu category.')
 
 def print_all(dict):
     """
